@@ -232,7 +232,7 @@ document.getElementById("subscribeBtn").addEventListener(
                 });
 
             const response = await fetch(
-                "http://127.0.0.1:8000/api/save-push-subscription/",
+              "https://notification-system-1-cumz.onrender.com/api/save-push-subscription/",
                 {
                     method: "POST",
 
@@ -293,7 +293,7 @@ document.getElementById("loginBtn").addEventListener(
         try {
 
             const response = await fetch(
-                "http://127.0.0.1:8000/api/login/",
+                "https://notification-system-1-cumz.onrender.com/api/login/",
                 {
                     method: "POST",
 
@@ -348,7 +348,7 @@ document.getElementById("logoutBtn").addEventListener(
             const username = localStorage.getItem("loggedInUsername");
 
             const response = await fetch(
-                "http://127.0.0.1:8000/api/logout/",
+                "https://notification-system-1-cumz.onrender.com/api/logout/",
                 {
                     method: "POST",
 
