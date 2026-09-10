@@ -1,0 +1,25 @@
+# Environment / secrets
+.env
+vapid_private.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+myvenv/
+venv/
+.venv/
+
+# Django
+db.sqlite3
+*.log
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
