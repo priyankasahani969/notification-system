@@ -1,263 +1,321 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Create Account - Notification System</title>
 
-<title>Create Account - Notification System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #eef2ff, #f8fafc);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.10);
+        }
 
-    .container {
-        width: 100%;
-        max-width: 420px;
-        background: white;
-        padding: 35px;
-        border-radius: 16px;
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.10);
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    .header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #1f2937;
+        }
 
-    .header h1 {
-        margin: 0;
-        font-size: 28px;
-        color: #1f2937;
-    }
+        .header p {
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 14px;
+        }
 
-    .header p {
-        margin-top: 8px;
-        color: #6b7280;
-        font-size: 14px;
-    }
+        .form-group {
+            margin-bottom: 17px;
+        }
 
-    .form-group {
-        margin-bottom: 17px;
-    }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
 
-    label {
-        display: block;
-        margin-bottom: 6px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #374151;
-    }
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
 
-    input {
-        width: 100%;
-        padding: 12px 14px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        font-size: 14px;
-        outline: none;
-        transition: 0.2s;
-    }
+        input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
+        }
 
-    input:focus {
-        border-color: #4f46e5;
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
-    }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
 
-    button {
-        width: 100%;
-        padding: 12px;
-        margin-top: 8px;
-        border: none;
-        border-radius: 8px;
-        background: #4f46e5;
-        color: white;
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.2s;
-    }
+        button:hover {
+            opacity: 0.92;
+        }
 
-    button:hover {
-        transform: translateY(-1px);
-        opacity: 0.92;
-    }
+        /* Loading */
 
-    .login-link {
-        text-align: center;
-        margin-top: 22px;
-        font-size: 14px;
-        color: #6b7280;
-    }
+        button.loading {
+            opacity: 0.75;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
-    .login-link a {
-        color: #4f46e5;
-        text-decoration: none;
-        font-weight: 600;
-    }
+        .btn-loader {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: 0 auto;
+        }
 
-    .login-link a:hover {
-        text-decoration: underline;
-    }
+        button.loading .btn-text {
+            display: none;
+        }
 
-    #status {
-        margin-top: 18px;
-        padding: 10px;
-        border-radius: 8px;
-        text-align: center;
-        font-size: 14px;
-        color: #374151;
-        background: #f3f4f6;
-        min-height: 38px;
-    }
-</style>
+        button.loading .btn-loader {
+            display: block;
+        }
 
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .login-link a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        #status {
+            margin-top: 18px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            color: #374151;
+            background: #f3f4f6;
+            min-height: 38px;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
+        <div class="header">
+            <h1>Create Account</h1>
+            <p>Register to use the Notification System</p>
+        </div>
 
-<div class="header">
-    <h1>Create Account</h1>
-    <p>Register to use the Notification System</p>
-</div>
+        <form id="registerForm">
 
-<form id="registerForm">
+            <div class="form-group">
 
-    <div class="form-group">
-        <label for="username">Username</label>
+                <label for="username">
+                    Username
+                </label>
 
-        <input
-            type="text"
-            id="username"
-            placeholder="Enter your username"
-            required
-        >
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter your username"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Create a password"
+                    required
+                >
+
+            </div>
+
+            <button id="registerBtn" type="submit">
+
+                <span class="btn-text">
+                    Create Account
+                </span>
+
+                <span class="btn-loader"></span>
+
+            </button>
+
+        </form>
+
+        <p class="login-link">
+            Already have an account?
+            <a href="index.html">Login</a>
+        </p>
+
+        <p id="status">
+            Ready
+        </p>
+
     </div>
 
-    <div class="form-group">
-        <label for="email">Email</label>
+    <script>
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            required
-        >
-    </div>
+        const registerForm = document.getElementById("registerForm");
+        const registerBtn = document.getElementById("registerBtn");
+        const status = document.getElementById("status");
 
-    <div class="form-group">
-        <label for="password">Password</label>
+        registerForm.addEventListener("submit", async function (event) {
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Create a password"
-            required
-        >
-    </div>
+            event.preventDefault();
 
-    <button type="submit">
-        Create Account
-    </button>
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
 
-</form>
+            if (!username || !email || !password) {
 
-<p class="login-link">
-    Already have an account?
-    <a href="index.html">Login</a>
-</p>
+                status.innerText = "Please fill all fields.";
 
-<p id="status">Ready</p>
-
-</div>
-
-
-
-
-
-
-<script>
-
-document.getElementById("registerForm").addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-        const username =
-            document.getElementById("username").value;
-
-        const email =
-            document.getElementById("email").value;
-
-        const password =
-            document.getElementById("password").value;
-
-        const status =
-            document.getElementById("status");
-
-        try {
-
-            const response = await fetch(
-                "https://notification-system-1-cumz.onrender.com/api/register/",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        username: username,
-                        email: email,
-                        password: password
-                    })
-                }
-            );
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    result.error || "Registration failed"
-                );
+                return;
             }
 
-            status.innerText =
-                "Registration successful! Redirecting to login...";
+            registerBtn.classList.add("loading");
 
-            setTimeout(function () {
-                window.location.href = "index.html";
-            }, 1500);
+            status.innerText = "Creating account...";
 
-        } catch (error) {
+            try {
 
-            console.error(error);
+                const response = await fetch(
+                    "https://notification-system-1-cumz.onrender.com/api/register/",
+                    {
+                        method: "POST",
 
-            status.innerText =
-                "Error: " + error.message;
-        }
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
 
-    }
-);
+                        body: JSON.stringify({
+                            username: username,
+                            email: email,
+                            password: password
+                        })
+                    }
+                );
 
-</script>
+                const result = await response.json();
+
+                console.log("REGISTER STATUS:", response.status);
+                console.log("REGISTER RESPONSE:", result);
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.error ||
+                        result.detail ||
+                        "Registration failed"
+                    );
+                }
+
+                status.innerText = "Account created successfully!";
+
+                alert("Account created successfully! 🎉");
+
+                setTimeout(function () {
+
+                    window.location.href = "index.html";
+
+                }, 500);
+
+            } catch (error) {
+
+                console.error("REGISTRATION ERROR:", error);
+
+                status.innerText = "Error: " + error.message;
+
+                registerBtn.classList.remove("loading");
+            }
+
+        });
+
+    </script>
+
 </body>
+
 </html>

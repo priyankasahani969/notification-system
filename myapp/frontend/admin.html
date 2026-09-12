@@ -318,6 +318,21 @@
         </form>
 
         <div id="loginStatus"></div>
+        <div id="loginStatus"></div>
+
+        <p style="text-align:right; margin:18px 0 0;">
+            <a
+                href="index.html"
+                style="
+                    color:#4f46e5;
+                    text-decoration:none;
+                    font-size:13px;
+                    font-weight:600;
+                "
+            >
+                ← User Login
+            </a>
+        </p>
 
     </div>
 
@@ -403,7 +418,7 @@
 
 <script>
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = "https://notification-system-1-cumz.onrender.com/api";
 
 /* ================= CSRF ================= */
 
@@ -703,14 +718,27 @@ async function loadNotifications() {
 
 
 /* ================= TOGGLE ================= */
-
-async function toggleTemplate(
-    id,
-    currentStatus
-) {
+async function toggleTemplate(id, currentStatus) {
 
     try {
 
+        // Get fresh CSRF token
+        const csrfResponse = await fetch(
+            `${API_URL}/csrf/`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        const csrfData = await csrfResponse.json();
+
+        const csrfToken = csrfData.csrfToken;
+
+        console.log("TOGGLE CSRF TOKEN:", csrfToken);
+
+
+        // Update template
         const response = await fetch(
             `${API_URL}/templates/${id}/`,
             {
@@ -718,9 +746,7 @@ async function toggleTemplate(
 
                 headers: {
                     "Content-Type": "application/json",
-
-                    "X-CSRFToken":
-                        getCookie("csrftoken")
+                    "X-CSRFToken": csrfToken
                 },
 
                 credentials: "include",
@@ -732,28 +758,36 @@ async function toggleTemplate(
         );
 
 
+        const result = await response.json();
+
+        console.log("TOGGLE STATUS:", response.status);
+        console.log("TOGGLE RESPONSE:", result);
+
+
         if (!response.ok) {
 
             throw new Error(
+                result.detail ||
+                result.error ||
                 "Failed to update template"
             );
-
         }
 
 
+        // Reload dashboard
         await loadNotifications();
 
 
     } catch (error) {
+
+        console.error("TOGGLE ERROR:", error);
 
         alert(error.message);
 
     }
 }
 
-
 /* ================= EDIT ================= */
-
 async function editTemplate(id) {
 
     try {
@@ -765,15 +799,11 @@ async function editTemplate(id) {
             }
         );
 
-
         if (!response.ok) {
-
             throw new Error(
                 "Failed to load template"
             );
-
         }
-
 
         const template =
             await response.json();
@@ -784,7 +814,6 @@ async function editTemplate(id) {
                 "Enter Subject:",
                 template.subject || ""
             );
-
 
         if (subject === null) {
             return;
@@ -797,12 +826,28 @@ async function editTemplate(id) {
                 template.content || ""
             );
 
-
         if (content === null) {
             return;
         }
 
 
+        // Get fresh CSRF token
+        const csrfResponse = await fetch(
+            `${API_URL}/csrf/`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        const csrfData =
+            await csrfResponse.json();
+
+        const csrfToken =
+            csrfData.csrfToken;
+
+
+        // Update template
         const updateResponse =
             await fetch(
                 `${API_URL}/templates/${id}/`,
@@ -811,9 +856,7 @@ async function editTemplate(id) {
 
                     headers: {
                         "Content-Type": "application/json",
-
-                        "X-CSRFToken":
-                            getCookie("csrftoken")
+                        "X-CSRFToken": csrfToken
                     },
 
                     credentials: "include",
@@ -826,12 +869,28 @@ async function editTemplate(id) {
             );
 
 
+        const result =
+            await updateResponse.json();
+
+        console.log(
+            "EDIT STATUS:",
+            updateResponse.status
+        );
+
+        console.log(
+            "EDIT RESPONSE:",
+            result
+        );
+
+
         if (!updateResponse.ok) {
 
             throw new Error(
+                result.detail ||
+                result.error ||
+                JSON.stringify(result) ||
                 "Failed to update template"
             );
-
         }
 
 
@@ -839,22 +898,21 @@ async function editTemplate(id) {
             "Template updated successfully!"
         );
 
-
         await loadNotifications();
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "EDIT ERROR:",
+            error
+        );
 
         alert(error.message);
-
     }
 }
 
-
 /* ================= CREATE ================= */
-
 async function createTemplate(
     triggerId,
     channel
@@ -862,7 +920,6 @@ async function createTemplate(
 
     const subject =
         prompt("Enter Subject:");
-
 
     if (subject === null) {
         return;
@@ -872,7 +929,6 @@ async function createTemplate(
     const content =
         prompt("Enter Content:");
 
-
     if (content === null) {
         return;
     }
@@ -880,6 +936,23 @@ async function createTemplate(
 
     try {
 
+        // Get fresh CSRF token
+        const csrfResponse = await fetch(
+            `${API_URL}/csrf/`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        const csrfData =
+            await csrfResponse.json();
+
+        const csrfToken =
+            csrfData.csrfToken;
+
+
+        // Create template
         const response =
             await fetch(
                 `${API_URL}/templates/`,
@@ -888,9 +961,7 @@ async function createTemplate(
 
                     headers: {
                         "Content-Type": "application/json",
-
-                        "X-CSRFToken":
-                            getCookie("csrftoken")
+                        "X-CSRFToken": csrfToken
                     },
 
                     credentials: "include",
@@ -910,13 +981,25 @@ async function createTemplate(
             await response.json();
 
 
+        console.log(
+            "CREATE STATUS:",
+            response.status
+        );
+
+        console.log(
+            "CREATE RESPONSE:",
+            result
+        );
+
+
         if (!response.ok) {
 
             throw new Error(
                 result.detail ||
+                result.error ||
+                JSON.stringify(result) ||
                 "Failed to create template"
             );
-
         }
 
 
@@ -930,7 +1013,10 @@ async function createTemplate(
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "CREATE ERROR:",
+            error
+        );
 
         alert(error.message);
 
